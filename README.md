@@ -15,20 +15,27 @@ Please note that:
 Example:
 
 ```sh
-$ make KDIR=.../linux-with-rust-support LLVM=1
-make -C .../linux-with-rust-support M=$PWD
-make[1]: Entering directory '.../linux-with-rust-support'
-  RUSTC [M] .../rust-out-of-tree-module/rust_out_of_tree.o
-  MODPOST .../rust-out-of-tree-module/Module.symvers
-  CC [M]  .../rust-out-of-tree-module/rust_out_of_tree.mod.o
-  LD [M]  .../rust-out-of-tree-module/rust_out_of_tree.ko
-make[1]: Leaving directory '.../linux-with-rust-support'
+$ make
+make -C /lib/modules/`uname -r`/build M=$PWD
+make[1]: Entering directory '/home/arch/rust-linux'
+  RUSTC [M] /home/arch/rust-netfilter-module/rust_out_of_tree.o
+  MODPOST /home/arch/rust-netfilter-module/Module.symvers
+  CC [M]  /home/arch/rust-netfilter-module/rust_out_of_tree.mod.o
+  LD [M]  /home/arch/rust-netfilter-module/rust_out_of_tree.ko
+make[1]: Leaving directory '/home/arch/rust-linux'
+```
+
+```sh
+$ sudo insmod rust_out_of_tree.ko
+
+$ sudo dmesg -w
 ```
 
 ```txt
-[    1.076945] rust_out_of_tree: Rust out-of-tree sample (init)
-[    1.084944] rust_out_of_tree: My numbers are [72, 108, 200]
-[    1.085944] rust_out_of_tree: Rust out-of-tree sample (exit)
+[ 3004.972269] rust_netfilter: packet headlen=52, len=52, first bytes=[45, 48, 00, 34, 00, 00, 40, 00, 2d, 06]
+[ 3004.973194] rust_netfilter: packet headlen=52, len=460, first bytes=[45, 48, 01, cc, 1a, 4a, 40, 00, 40, 06]
+[ 3004.974895] rust_netfilter: packet headlen=52, len=52, first bytes=[45, 48, 00, 34, 00, 00, 40, 00, 2d, 06]
+[ 3004.980094] rust_netfilter: packet headlen=52, len=348, first bytes=[45, 48, 01, 5c, 1a, 4b, 40, 00, 40, 06]
 ```
 
 For details about the Rust support, see https://github.com/Rust-for-Linux/linux.
